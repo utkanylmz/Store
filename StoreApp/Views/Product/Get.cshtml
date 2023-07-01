@@ -1,10 +1,21 @@
 ﻿
 
 @model Product
+<div class="row">
+    <div class="col-md-12"> 
+        <div class="text-center">
+            <h6 class="display-6">  
+                <h3>@Model.ProductName</h3>
+            </h6>
+            <img class="imf-fluid shadow rounded-3 my-3" src="@Model.ImageUrl" alt="@Model.ProductName"/>
 
+            <p class="lead text-danger">@Model.Price.ToString("c")</p>
+        </div>
+    </div>
+</div>
 <body>
-    <h3>@Model.ProductName</h3>
-    <p>@Model.Price</p>
+    
+
    
     <div class="btn-group">
         <a class="btn btn-outline-primary" asp-controller="Home" asp-action="Index">

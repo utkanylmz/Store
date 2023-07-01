@@ -1,4 +1,5 @@
 ﻿using Entities.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Repositories.Contract;
 using System;
 using System.Collections.Generic;
@@ -14,11 +15,22 @@ namespace Repositories
         {
             
         }
+
+        public void CreateProduct(Product product) => Create(product);
+
+        public void DeleteOneProduct(Product product) => Remove(product);
+
+        public void UpdateOneProduct(Product product) => Update(product);
+
+
+
         public IQueryable<Product> GetAllProducts(bool trackChanges)=>FindAll(trackChanges);
 
         public Product? GetOneProduct(int id, bool trackChanges)
         {
-            return FindByCondition(p=>p.Id.Equals(id),trackChanges);
+            return FindByCondition(p => p.Id.Equals(id), trackChanges);
         }
+
+
     }
 }

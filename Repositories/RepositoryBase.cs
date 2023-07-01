@@ -18,6 +18,11 @@ namespace Repositories
             this.context = context;
         }
 
+        public void Create(T entity)
+        {
+           context.Set<T>().Add(entity);
+        }
+
         public IQueryable<T> FindAll(bool trackChanges)
         {
             return trackChanges ? context.Set<T>()
@@ -29,6 +34,16 @@ namespace Repositories
             return trackChanges ?
                              context.Set<T>().Where(expression).SingleOrDefault()
                            : context.Set<T>().Where(expression).AsNoTracking().SingleOrDefault();
+        }
+
+        public void Remove(T entity)
+        {
+            context.Set<T>().Remove(entity);
+        }
+
+        public void Update(T entity)
+        {
+            context.Set<T>().Update(entity); 
         }
     }
 }
