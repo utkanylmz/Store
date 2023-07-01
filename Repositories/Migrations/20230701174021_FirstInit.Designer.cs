@@ -12,8 +12,8 @@ using Repositories;
 namespace Repositories.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20230627125206_Init")]
-    partial class Init
+    [Migration("20230701174021_FirstInit")]
+    partial class FirstInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,32 @@ namespace Repositories.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("Entities.Models.CartLine", b =>
+                {
+                    b.Property<int>("CartLineId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartLineId"), 1L, 1);
+
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("CartLineId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("CartLine");
+                });
 
             modelBuilder.Entity("Entities.Models.Category", b =>
                 {
@@ -53,6 +79,45 @@ namespace Repositories.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Entities.Models.Order", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"), 1L, 1);
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("GiftWrap")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Line1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Line2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Line3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("OrderAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Shipped")
+                        .HasColumnType("bit");
+
+                    b.HasKey("OrderId");
+
+                    b.ToTable("Orders");
+                });
+
             modelBuilder.Entity("Entities.Models.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -74,6 +139,9 @@ namespace Repositories.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("ShowCase")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Summary")
                         .HasColumnType("nvarchar(max)");
 
@@ -91,6 +159,7 @@ namespace Repositories.Migrations
                             ImageUrl = "/images/1.jpg",
                             Price = 17000m,
                             ProductName = "Computer",
+                            ShowCase = false,
                             Summary = ""
                         },
                         new
@@ -100,6 +169,7 @@ namespace Repositories.Migrations
                             ImageUrl = "/images/2.jpg",
                             Price = 1000m,
                             ProductName = "Keyboard",
+                            ShowCase = false,
                             Summary = ""
                         },
                         new
@@ -109,6 +179,7 @@ namespace Repositories.Migrations
                             ImageUrl = "/images/3.jpg",
                             Price = 500m,
                             ProductName = "Mouse",
+                            ShowCase = false,
                             Summary = ""
                         },
                         new
@@ -118,6 +189,7 @@ namespace Repositories.Migrations
                             ImageUrl = "/images/4.jpg",
                             Price = 7000m,
                             ProductName = "Monitor",
+                            ShowCase = false,
                             Summary = ""
                         },
                         new
@@ -127,6 +199,7 @@ namespace Repositories.Migrations
                             ImageUrl = "/images/5.jpg",
                             Price = 1500m,
                             ProductName = "Deck",
+                            ShowCase = false,
                             Summary = ""
                         },
                         new
@@ -136,6 +209,7 @@ namespace Repositories.Migrations
                             ImageUrl = "/images/6.jpg",
                             Price = 750m,
                             ProductName = "Tarih",
+                            ShowCase = false,
                             Summary = ""
                         },
                         new
@@ -145,8 +219,54 @@ namespace Repositories.Migrations
                             ImageUrl = "/images/7.jpg",
                             Price = 2000m,
                             ProductName = "Hamlet",
+                            ShowCase = false,
+                            Summary = ""
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CategoryId = 1,
+                            ImageUrl = "/images/8.jpg",
+                            Price = 1145m,
+                            ProductName = "Xp-pen",
+                            ShowCase = true,
+                            Summary = ""
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CategoryId = 2,
+                            ImageUrl = "/images/9.jpg",
+                            Price = 4445m,
+                            ProductName = "Galaxy FE",
+                            ShowCase = true,
+                            Summary = ""
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CategoryId = 1,
+                            ImageUrl = "/images/10.jpg",
+                            Price = 545m,
+                            ProductName = "HP Mouse",
+                            ShowCase = true,
                             Summary = ""
                         });
+                });
+
+            modelBuilder.Entity("Entities.Models.CartLine", b =>
+                {
+                    b.HasOne("Entities.Models.Order", null)
+                        .WithMany("Lines")
+                        .HasForeignKey("OrderId");
+
+                    b.HasOne("Entities.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Entities.Models.Product", b =>
@@ -161,6 +281,11 @@ namespace Repositories.Migrations
             modelBuilder.Entity("Entities.Models.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("Entities.Models.Order", b =>
+                {
+                    b.Navigation("Lines");
                 });
 #pragma warning restore 612, 618
         }

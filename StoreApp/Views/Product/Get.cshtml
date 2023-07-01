@@ -1,35 +1,46 @@
-﻿
-
-@model Product
+﻿@model Product
 <div class="row">
-    <div class="col-md-12"> 
+    <div class="col-md-12">
         <div class="text-center">
-            <h6 class="display-6">  
+            <h6 class="display-6">
                 <h3>@Model.ProductName</h3>
             </h6>
-            <img class="imf-fluid shadow rounded-3 my-3" src="@Model.ImageUrl" alt="@Model.ProductName"/>
+            <img class="imf-fluid shadow rounded-3 my-3" src="@Model.ImageUrl" alt="@Model.ProductName" />
 
             <p class="lead text-danger">@Model.Price.ToString("c")</p>
         </div>
     </div>
 </div>
 <body>
-    
 
-   
-    <div class="btn-group">
-        <a class="btn btn-outline-primary" asp-controller="Home" asp-action="Index">
-            <i class="fa-solid fa-house-chimney"></i>
-            Home</a>
-        <a class="btn btn-outline-primary" asp-controller="Product" asp-action="Index">
-            <i class="fa-solid fa-list"></i>
-            Product</a>
-        
 
+    <div class="text-center">
+        <div class="btn-group">
+            <a class="btn btn-outline-primary" asp-controller="Home" asp-action="Index">
+                <i class="fa-solid fa-house-chimney"></i>
+                Home
+            </a>
+            <form itemid="@Model.Id" asp-page="/cart" method="post">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" name="returnUrl" value="@ViewContext.HttpContext.Request.PathAndQuery()" />
+                <button type="submit" class="btn btn-outline-primary">
+                    <i class="fa fa-cart-plus"></i> Sepete Ekle
+                </button>
+
+            </form>
+            <a class="btn btn-outline-primary" asp-controller="Product" asp-action="Index">
+                <i class="fa-solid fa-list"></i>
+                Product
+            </a>
+        </div>
     </div>
+
+
+
 
 </body>
 
-@section Header{}
-    
+@section Header{
+}
+
 
